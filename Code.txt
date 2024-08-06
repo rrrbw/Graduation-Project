@@ -1,0 +1,165 @@
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2C lcd(0x27, 20, 4);  // set the LCD address to 0x27 for a 16 chars and 2 line display
+
+int mode = 5;
+int mod = 0;
+boolean onn = 1;
+int relay_mode = 3;
+int calibrate = 4;
+
+int relay_calibrate = 2;
+void setup() {
+
+  Serial.begin(9600);
+  lcd.init();  // initialize the lcd
+  lcd.init();
+  lcd.backlight();
+  lcd.setCursor(0, 0);
+  lcd.print("GRADUATION PROJECT");
+  lcd.setCursor(2, 1);
+  lcd.print("wall scanner");
+
+  pinMode(mode, INPUT_PULLUP);
+  pinMode(calibrate, INPUT_PULLUP);
+
+  pinMode(relay_mode, OUTPUT);
+  pinMode(relay_calibrate, OUTPUT);
+
+  digitalWrite(relay_calibrate, 1);
+  digitalWrite(relay_mode, 1);
+}
+
+void loop() {
+
+  if (digitalRead(calibrate) == 0) {
+
+    digitalWrite(relay_calibrate, 0);
+    delay(400);
+    digitalWrite(relay_calibrate, 1);
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("calibrating");
+    for (int i = 0; i < 16; i++) {
+      lcd.setCursor(i, 1);
+      lcd.print(">");
+      delay(230);
+    }
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("done calibrating");
+    delay(1000);
+  }
+
+
+
+  if (digitalRead(mode) == 0 && onn == 1) {
+    mod++;
+    Serial.println(mod);
+    onn = 0;
+  }
+  if (mod == 1 && onn == 0) {
+    digitalWrite(relay_mode, 0);
+    delay(400);
+    digitalWrite(relay_mode, 1);
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("put on the wall");
+    lcd.setCursor(0, 1);
+    lcd.print("to  calibrate");
+    delay(2000);
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("mode stud finder");
+    lcd.setCursor(1, 1);
+    lcd.print("distance 1.5cm");
+
+    onn = 1;
+  }
+
+  if (mod == 2 && onn == 0) {
+    digitalWrite(relay_mode, 0);
+    delay(400);
+    digitalWrite(relay_mode, 1);
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("put on the wall");
+    lcd.setCursor(0, 1);
+    lcd.print("to  calibrate");
+    delay(2000);
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("mode stud finder");
+    lcd.setCursor(1, 1);
+    lcd.print("distance 2.5cm");
+
+    onn = 1;
+  }
+
+  if (mod == 3 && onn == 0) {
+    digitalWrite(relay_mode, 0);
+    delay(400);
+    digitalWrite(relay_mode, 1);
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("put on the wall");
+    lcd.setCursor(0, 1);
+    lcd.print("to  calibrate");
+    delay(2000);
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("mode stud finder");
+    lcd.setCursor(1, 1);
+    lcd.print("distance 4 cm");
+    onn = 1;
+  }
+
+  if (mod == 4 && onn == 0) {
+    digitalWrite(relay_mode, 0);
+    delay(400);
+    digitalWrite(relay_mode, 1);
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("put on metal");
+    lcd.setCursor(0, 1);
+    lcd.print("to  calibrate");
+    delay(2000);
+    lcd.clear();
+    lcd.clear();
+    lcd.setCursor(6, 0);
+    lcd.print("mode ");
+    lcd.setCursor(2, 1);
+    lcd.print("metal detect");
+    onn = 1;
+  }
+
+  if (mod == 5 && onn == 0) {
+    digitalWrite(relay_mode, 0);
+    delay(400);
+    digitalWrite(relay_mode, 1);
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("put on wall");
+    lcd.setCursor(0, 1);
+    lcd.print("to  calibrate");
+    delay(2000);
+    lcd.clear();
+    lcd.clear();
+    lcd.setCursor(6, 0);
+    lcd.print("mode ");
+    lcd.setCursor(2, 1);
+    lcd.print("wire detect");
+    onn = 1;
+  }
+
+  if (mod == 6 && onn == 0) {
+
+    mod = 0;
+    onn = 1;
+  }
+}
